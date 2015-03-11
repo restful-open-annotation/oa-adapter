@@ -1,2 +1,3 @@
-# oa-adapter
-Open Annotation adapter
+# Open Annotation adapter
+
+Middleware for RESTful Open Annotation services.
