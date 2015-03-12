@@ -20,9 +20,6 @@ from pyld import jsonld
 
 from contexts import wa_context_20141211
 
-class ValidationError(Exception):
-    pass
-
 def default_context():
     return wa_context_20141211
 
