@@ -34,6 +34,44 @@ def render(data, options=None):
 
     prettyprint = options.get('prettyprint', PRETTYPRINT_DEFAULT)
     if prettyprint:
-        return graph.serialize(format='pretty-xml')
+        format='pretty-xml'
     else:
-        return graph.serialize(format='xml')
+        format='xml'
+
+    try:
+        return graph.serialize(format=format)
+    except Exception, e:
+        _process_xml_serialization_exception(e)
+
+def parse(data, options=None):
+    """Parse RDF/XML data into JSON-LD.
+
+    Args:
+        data: string in RDF/XML format.
+        options: dict of parsing options, or None for defaults.
+
+    Returns:
+        dict containing JSON-LD data in expanded JSON-LD form
+            (see http://www.w3.org/TR/json-ld/#expanded-document-form).
+    """
+    if options is None:
+        options = {}
+
+    return rdfgraph.to_jsonld(data, 'xml')
+
+def _process_xml_serialization_exception(e):
+    # Special-case processing for rdflib failures to serialize into
+    # RDF/XML.
+    if "Can't split " in str(e):
+        print """
+Note: it appears that rdflib is failing to split a URI into a namespace
+and name in RDF/XML serialization:
+
+    %s
+
+This may be a bug in rdflib. You could try adding a hash into the URI,
+this seems to help in some cases.
+""" % str(e)
+        raise Exception('rdflib failed to split URI into namespace and name: %s' % str(e))
+    else:
+        raise e

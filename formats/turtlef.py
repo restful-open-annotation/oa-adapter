@@ -30,3 +30,19 @@ def render(data, options=None):
     # value in any quad. Check for quads and at least warn if any
     # found.
     return graph.serialize(format='turtle')
+
+def parse(data, options=None):
+    """Parse Turtle data into JSON-LD.
+
+    Args:
+        data: string in Turtle format.
+        options: dict of parsing options, or None for defaults.
+
+    Returns:
+        dict containing JSON-LD data in expanded JSON-LD form
+            (see http://www.w3.org/TR/json-ld/#expanded-document-form).
+    """
+    if options is None:
+        options = {}
+
+    return rdfgraph.to_jsonld(data, 'turtle')

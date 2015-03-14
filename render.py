@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Support for rendering various MIME types."""
+"""Support for rendering JSON-LD into various MIME types."""
 
 __author__ = 'Sampo Pyysalo'
 __license__ = 'MIT'
@@ -20,22 +20,10 @@ import formats.trigf
 import formats.trixf
 import formats.turtlef
 
-# make sure required content types are registered with mimerender
-_content_types = {
-    'jsonld': ('application/ld+json', ),
-    'nt':     ('application/n-triples', ),
-    'nquads': ('application/n-quads', ),
-    # Note: "charset" for n3 and turtle is not an error: "This MIME
-    # type is used with a charset parameter: the encoding is always
-    # utf-8. [...] This is because the default encoding for types in
-    # the text/* tree is ASCII (http://www.w3.org/TeamSubmission/n3/).
-    'n3':     ('text/n3; charset=utf-8', 'text/n3'),
-    'trig':   ('application/trig', ),
-    'trix':   ('application/trix', ),
-    'turtle': ('text/turtle; charset=utf-8', 'text/turtle'),
-}
+from formats import rdfgraph
 
-for shortname, content_types in _content_types.iteritems():
+# make sure required content types are registered with mimerender
+for shortname, content_types in rdfgraph.format_to_content_types.iteritems():
     try:
         mimerender.register_mime(shortname, content_types)
     except mimerender.MimeRenderException:

@@ -18,6 +18,7 @@ __license__ = 'MIT'
 
 from pyld import jsonld
 
+from contexts import get_context
 from contexts import wa_context_20141211
 
 def default_context():
@@ -39,6 +40,11 @@ def _make_options(context, base):
 def expand(document, context=None, base=None):
     """Expand OA JSON-LD, removing context."""
     # See http://www.w3.org/TR/json-ld-api/#expansion
+    if context is None:
+        # if the JSON-LD document has a @context value that is a URL
+        # that we know, fill it in from cache to save a GET.
+        if '@context' in document:
+            document['@context'] = get_context(document['@context'])
     return jsonld.expand(document, _make_options(context, base))
 
 def compact(document, context=None, base=None, remove_context=False):

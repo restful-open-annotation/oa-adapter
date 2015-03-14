@@ -35,3 +35,27 @@ def render(data, options=None):
         return json.dumps(data, indent=2, separators=(',', ': '))+'\n'
     else:
         return json.dumps(data)
+
+def parse(data, options=None):
+    """Parse JSON-LD data.
+
+    Args:
+        data: string in JSON-LD format.
+        options: dict of parsing options, or None for defaults.
+
+    Returns:
+        dict containing JSON-LD data in expanded JSON-LD form
+            (see http://www.w3.org/TR/json-ld/#expanded-document-form).
+    """
+    if options is None:
+        options = {}
+
+    encoding = options.get('encoding')
+
+    if encoding is None:
+        jsonld = json.loads(data)
+    else:
+        jsonld = json.loads(data, encoding=encoding)
+
+    # TODO: expand
+    return jsonld

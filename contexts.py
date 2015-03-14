@@ -115,3 +115,9 @@ url_to_context = {
     # status 307 Temporary Redirect
     'http://www.w3.org/ns/oa.jsonld': oa_context_20130208,
 }
+
+def get_context(url):
+    # Return context for the given URL if known.
+    if not isinstance(url, basestring):
+        return url  # can only map strings
+    return url_to_context.get(url, url)

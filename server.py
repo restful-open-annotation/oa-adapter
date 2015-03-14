@@ -12,15 +12,12 @@ import flask
 
 import oajson
 
+from parse import parse_data
 from render import render_resource
 
 DEBUG = True
 
 app = flask.Flask(__name__)
-
-def get_content_type(request):
-    """Return Content-Type from Flask request."""
-    return reques.mimetype
 
 def get_json(request, abort_on_failure=True):
     """Return JSON from Flask request."""
@@ -36,13 +33,20 @@ def get_json(request, abort_on_failure=True):
         else:
             raise
 
+def get_request_data(request):
+    """Return (data, mimetype, charset) triple for Flask request."""
+    mimetype = request.mimetype
+    charset = request.mimetype_params.get('charset')
+    data = request.get_data()
+    return (data, mimetype, charset)
+
 @app.route('/echo/', methods=['PUT', 'POST'])
 @render_resource
 def echo():
     """Echo back received data, possibly in a different representation."""
-    data = get_json(flask.request, True)
-    # Output rendering functions expect expanded JSON-LD
-    # TODO: provide a way for the client to assign base
+    data, mimetype, charset = get_request_data(flask.request)
+    data = parse_data(data, mimetype, charset)
+    # TODO: check in which cases expansion is required.
     data = oajson.expand(data, base=flask.request.base_url)
     return { 'data': data }
 

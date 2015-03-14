@@ -27,3 +27,19 @@ def render(data, options=None):
     graph = rdfgraph.from_jsonld(data)
 
     return graph.serialize(format='trix')
+
+def parse(data, options=None):
+    """Parse TriX data into JSON-LD.
+
+    Args:
+        data: string in TriX format.
+        options: dict of parsing options, or None for defaults.
+
+    Returns:
+        dict containing JSON-LD data in expanded JSON-LD form
+            (see http://www.w3.org/TR/json-ld/#expanded-document-form).
+    """
+    if options is None:
+        options = {}
+
+    return rdfgraph.to_jsonld(data, 'trix')
