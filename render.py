@@ -25,7 +25,7 @@ _content_types = {
     'jsonld': ('application/ld+json', ),
     'nt':     ('application/n-triples', ),
     'nquads': ('application/n-quads', ),
-    # Note: "charset" for n3 and turthe is not an error: "This MIME
+    # Note: "charset" for n3 and turtle is not an error: "This MIME
     # type is used with a charset parameter: the encoding is always
     # utf-8. [...] This is because the default encoding for types in
     # the text/* tree is ASCII (http://www.w3.org/TeamSubmission/n3/).
