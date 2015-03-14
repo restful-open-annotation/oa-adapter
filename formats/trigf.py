@@ -5,7 +5,7 @@
 __author__ = 'Sampo Pyysalo'
 __license__ = 'MIT'
 
-import rdfgraph
+import rdftools
 
 def render(data, options=None):
     """Render JSON-LD data into TriG.
@@ -24,9 +24,7 @@ def render(data, options=None):
     if options is None:
         options = {}
 
-    graph = rdfgraph.from_jsonld(data)
-
-    return graph.serialize(format='trig')
+    return rdftools.from_jsonld(data, format='trig')
 
 def parse(data, options=None):
     """Parse Trig data into JSON-LD.
@@ -42,4 +40,4 @@ def parse(data, options=None):
     if options is None:
         options = {}
 
-    return rdfgraph.to_jsonld(data, 'trig')
+    return rdftools.to_jsonld(data, 'trig')

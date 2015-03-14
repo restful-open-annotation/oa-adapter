@@ -5,7 +5,7 @@
 __author__ = 'Sampo Pyysalo'
 __license__ = 'MIT'
 
-import rdfgraph
+import rdftools
 
 def render(data, options=None):
     """Render JSON-LD data into Turtle.
@@ -24,12 +24,10 @@ def render(data, options=None):
     if options is None:
         options = {}
 
-    graph = rdfgraph.from_jsonld(data)
-
     # TODO: rdflib Turtle serialization silently discards the fourth
     # value in any quad. Check for quads and at least warn if any
     # found.
-    return graph.serialize(format='turtle')
+    return rdftools.from_jsonld(data, format='turtle')
 
 def parse(data, options=None):
     """Parse Turtle data into JSON-LD.
@@ -45,4 +43,4 @@ def parse(data, options=None):
     if options is None:
         options = {}
 
-    return rdfgraph.to_jsonld(data, 'turtle')
+    return rdftools.to_jsonld(data, 'turtle')

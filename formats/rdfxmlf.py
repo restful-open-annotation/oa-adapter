@@ -5,7 +5,7 @@
 __author__ = 'Sampo Pyysalo'
 __license__ = 'MIT'
 
-import rdfgraph
+import rdftools
 
 # Default values for rendering options
 PRETTYPRINT_DEFAULT = True
@@ -30,8 +30,6 @@ def render(data, options=None):
     if options is None:
         options = {}
 
-    graph = rdfgraph.from_jsonld(data)
-
     prettyprint = options.get('prettyprint', PRETTYPRINT_DEFAULT)
     if prettyprint:
         format='pretty-xml'
@@ -39,7 +37,7 @@ def render(data, options=None):
         format='xml'
 
     try:
-        return graph.serialize(format=format)
+        return rdftools.from_jsonld(data, format=format)
     except Exception, e:
         _process_xml_serialization_exception(e)
 
@@ -57,7 +55,7 @@ def parse(data, options=None):
     if options is None:
         options = {}
 
-    return rdfgraph.to_jsonld(data, 'xml')
+    return rdftools.to_jsonld(data, 'xml')
 
 def _process_xml_serialization_exception(e):
     # Special-case processing for rdflib failures to serialize into

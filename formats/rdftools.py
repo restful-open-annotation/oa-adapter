@@ -30,23 +30,25 @@ content_type_to_format = dict((ct, name)
                               for name, cts in format_to_content_types.items()
                               for ct in cts)
 
-def from_jsonld(data):
-    """Return RDF graph from given JSON-LD data.
+def from_jsonld(data, format):
+    """Return string in given RDF format from JSON-LD data.
 
     Args:
         data: dict containing JSON-LD data in expanded JSON-LD form
             (see http://www.w3.org/TR/json-ld/#expanded-document-form).
+        format: short name or MIME type of an RDF format. For example
+            'nt' or 'application/n-triples' for N-Triples.
 
     Returns:
         instance of rdflib.Graph.
     """
     # As of this writing, 'application/nquads' is the only RDF format
-    # (other than JSON-LD) supported by pyld.
+    # (other than JSON-LD) supported by pyld. Convert via that.
     quads = jsonld.to_rdf(data, { 'format': 'application/nquads' })
     # Using ConjunctiveGraph instead of Graph for nquads support.
     graph = rdflib.ConjunctiveGraph()
     graph.parse(data=quads, format='nquads')
-    return graph
+    return graph.serialize(format=format)
 
 def from_string(data, format):
     """Return RDF graph from string in RDF format.
@@ -98,6 +100,7 @@ def to_jsonld(data, format):
         data: string in given RDF format.
         format: short name or MIME type of an RDF format. For example
             'nt' or 'application/n-triples' for N-Triples.
+
     Returns:
         data: dict containing JSON-LD data in expanded JSON-LD form
             (see http://www.w3.org/TR/json-ld/#expanded-document-form).
