@@ -7,6 +7,10 @@ __license__ = 'MIT'
 
 import json
 
+import flask
+
+import oajson
+
 # Default values for rendering options
 PRETTYPRINT_DEFAULT = True
 
@@ -15,6 +19,30 @@ format_name = 'jsonld'
 
 # The MIME types associated with this format.
 mimetypes = ['application/ld+json']
+
+# The profiles specifying the various JSON-LD document forms.
+# (See http://www.w3.org/TR/json-ld-syntax/#application-ld-json)
+JSON_LD_COMPACTED = "http://www.w3.org/ns/json-ld#compacted"
+JSON_LD_EXPANDED = "http://www.w3.org/ns/json-ld#expanded"
+JSON_LD_FLATTENED = "http://www.w3.org/ns/json-ld#flattened"
+JSON_LD_PROFILES = [
+    JSON_LD_COMPACTED,
+    JSON_LD_EXPANDED,
+    JSON_LD_FLATTENED,
+]
+DEFAULT_PROFILE = JSON_LD_COMPACTED
+
+def _select_response_form(request=None):
+    """Return the JSON-LD profile applying to the response."""
+    if request is None:
+        request = flask.request
+    header = request.headers.get('Accept', '')
+    for profile in JSON_LD_PROFILES:
+        # TODO: parse the header instead of just looking for a substring
+        if profile in header:
+            return profile
+    # TODO: check for Link headers with profile.
+    return DEFAULT_PROFILE
 
 def from_jsonld(data, options=None):
     """Render JSON-LD data into string.
@@ -35,6 +63,17 @@ def from_jsonld(data, options=None):
     """
     if options is None:
         options = {}
+
+    # Select the specific document form (expanded, compacted, or
+    # flattened) based on the request.
+    document_form = _select_response_form()
+    if document_form == JSON_LD_COMPACTED:
+        data = oajson.compact(data)
+    elif document_form == JSON_LD_FLATTENED:
+        data = oajson.flatten(data)
+    else:
+        assert document_form == JSON_LD_EXPANDED, 'internal error'
+        pass # no-op: internal representation is alredy expanded.
 
     prettyprint = options.get('prettyprint', PRETTYPRINT_DEFAULT)
     if prettyprint:
