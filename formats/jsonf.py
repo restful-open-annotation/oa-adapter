@@ -11,7 +11,7 @@ import json
 PRETTYPRINT_DEFAULT = True
 KEEPCONTEXT_DEFAULT = False
 
-def render(data, options=None):
+def from_jsonld(data, options=None):
     """Render JSON-LD data into JSON string.
 
     This is intended to be used as a mimerender render function
@@ -44,7 +44,7 @@ def render(data, options=None):
     else:
         return json.dumps(data)
 
-def parse(data, options=None):
+def to_jsonld(data, options=None):
     """Parse JSON data into JSON-LD.
 
     Args:

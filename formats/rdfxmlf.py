@@ -10,7 +10,7 @@ import rdftools
 # Default values for rendering options
 PRETTYPRINT_DEFAULT = True
 
-def render(data, options=None):
+def from_jsonld(data, options=None):
     """Render JSON-LD data into RDF/XML.
 
     This is intended to be used as a mimerender render function
@@ -41,7 +41,7 @@ def render(data, options=None):
     except Exception, e:
         _process_xml_serialization_exception(e)
 
-def parse(data, options=None):
+def to_jsonld(data, options=None):
     """Parse RDF/XML data into JSON-LD.
 
     Args:

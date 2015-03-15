@@ -7,7 +7,7 @@ __license__ = 'MIT'
 
 import rdftools
 
-def render(data, options=None):
+def from_jsonld(data, options=None):
     """Render JSON-LD data into TriG.
 
     This is intended to be used as a mimerender render function
@@ -26,7 +26,7 @@ def render(data, options=None):
 
     return rdftools.from_jsonld(data, format='trig')
 
-def parse(data, options=None):
+def to_jsonld(data, options=None):
     """Parse Trig data into JSON-LD.
 
     Args:

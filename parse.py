@@ -17,14 +17,14 @@ import formats.turtlef
 
 # TODO: unify with mimetype data in rdfgraph.py
 mimetype_to_parse_function = {
-    'application/ld+json': formats.jsonldf.parse,
-    'application/n-triples': formats.ntf.parse,
-    'application/n-quads': formats.nquadsf.parse,
-    'text/n3': formats.n3f.parse,
-    'application/trig': formats.trigf.parse,
-    'application/trix': formats.trixf.parse,
-    'application/rdf+xml': formats.rdfxmlf.parse,
-    'text/turtle': formats.turtlef.parse,
+    'application/ld+json': formats.jsonldf.to_jsonld,
+    'application/n-triples': formats.ntf.to_jsonld,
+    'application/n-quads': formats.nquadsf.to_jsonld,
+    'text/n3': formats.n3f.to_jsonld,
+    'application/trig': formats.trigf.to_jsonld,
+    'application/trix': formats.trixf.to_jsonld,
+    'application/rdf+xml': formats.rdfxmlf.to_jsonld,
+    'text/turtle': formats.turtlef.to_jsonld,
 }
 
 def parse_data(data, mimetype=None, charset=None):

@@ -7,7 +7,7 @@ __license__ = 'MIT'
 
 import rdftools
 
-def render(data, options=None):
+def from_jsonld(data, options=None):
     """Render JSON-LD data into Turtle.
 
     This is intended to be used as a mimerender render function
@@ -29,7 +29,7 @@ def render(data, options=None):
     # found.
     return rdftools.from_jsonld(data, format='turtle')
 
-def parse(data, options=None):
+def to_jsonld(data, options=None):
     """Parse Turtle data into JSON-LD.
 
     Args:

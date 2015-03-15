@@ -43,15 +43,15 @@ def no_mimetype_callback(accept_header, supported):
 def render_resource(f):
     return flaskmimerender(
         default='jsonld',
-        json=formats.jsonf.render,
-        jsonld=formats.jsonldf.render,
-        n3=formats.n3f.render,
-        nt=formats.ntf.render,
-        nquads=formats.nquadsf.render,
-        rdf=formats.rdfxmlf.render,
-        trig=formats.trigf.render,
-        trix=formats.trixf.render,
-        turtle=formats.turtlef.render,
+        json=formats.jsonf.from_jsonld,
+        jsonld=formats.jsonldf.from_jsonld,
+        n3=formats.n3f.from_jsonld,
+        nt=formats.ntf.from_jsonld,
+        nquads=formats.nquadsf.from_jsonld,
+        rdf=formats.rdfxmlf.from_jsonld,
+        trig=formats.trigf.from_jsonld,
+        trix=formats.trixf.from_jsonld,
+        turtle=formats.turtlef.from_jsonld,
         override_input_key='format',
         not_acceptable_callback=no_mimetype_callback
     )(f)

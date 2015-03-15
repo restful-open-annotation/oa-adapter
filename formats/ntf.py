@@ -7,7 +7,7 @@ __license__ = 'MIT'
 
 import rdftools
 
-def render(data, options=None):
+def from_jsonld(data, options=None):
     """Render JSON-LD data into N-Triples.
 
     This is intended to be used as a mimerender render function
@@ -29,7 +29,7 @@ def render(data, options=None):
     # any found.
     return rdftools.from_jsonld(data, format='nt')
 
-def parse(data, options=None):
+def to_jsonld(data, options=None):
     """Parse N-Triples data into JSON-LD.
 
     Args:

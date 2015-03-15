@@ -7,7 +7,7 @@ __license__ = 'MIT'
 
 from pyld import jsonld
 
-def render(data, options=None):
+def from_jsonld(data, options=None):
     """Render JSON-LD data into N-Quads.
 
     This is intended to be used as a mimerender render function
@@ -26,7 +26,7 @@ def render(data, options=None):
 
     return jsonld.to_rdf(data, { 'format': 'application/nquads' })
 
-def parse(data, options=None):
+def to_jsonld(data, options=None):
     """Parse N-Quads data into JSON-LD.
 
     Args:
