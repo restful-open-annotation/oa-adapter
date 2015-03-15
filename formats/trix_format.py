@@ -7,6 +7,12 @@ __license__ = 'MIT'
 
 import rdftools
 
+# Short name for this format.
+format_name = 'trix'
+
+# The MIME types associated with this format.
+mimetypes = ['application/trix']
+
 def from_jsonld(data, options=None):
     """Render JSON-LD data into TriX.
 

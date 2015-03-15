@@ -7,6 +7,12 @@ __license__ = 'MIT'
 
 from pyld import jsonld
 
+# Short name for this format.
+format_name = 'nquads'
+
+# The MIME types associated with this format.
+mimetypes = ['application/n-quads']
+
 def from_jsonld(data, options=None):
     """Render JSON-LD data into N-Quads.
 

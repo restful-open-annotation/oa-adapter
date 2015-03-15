@@ -11,6 +11,12 @@ import json
 PRETTYPRINT_DEFAULT = True
 KEEPCONTEXT_DEFAULT = False
 
+# Short name for this format.
+format_name = 'json'
+
+# The MIME types associated with this format.
+mimetypes = ['application/json']
+
 def from_jsonld(data, options=None):
     """Render JSON-LD data into JSON string.
 
@@ -61,9 +67,9 @@ def to_jsonld(data, options=None):
     encoding = options.get('encoding')
 
     if encoding is None:
-        json = json.loads(data)
+        jsonld = json.loads(data)
     else:
-        json = json.loads(data, encoding=encoding)
+        jsonld = json.loads(data, encoding=encoding)
 
     # TODO: add context and expand
-    return json
+    return jsonld

@@ -7,6 +7,16 @@ __license__ = 'MIT'
 
 import rdftools
 
+# Short name for this format.
+format_name = 'turtle'
+
+# The MIME types associated with this format.
+# Note: "charset" is not an error: "This MIME type is used with a
+# charset parameter: the encoding is always utf-8. [...] This is
+# because the default encoding for types in the text/* tree is ASCII
+# (http://www.w3.org/TeamSubmission/n3/).
+mimetypes = ['text/turtle; charset=utf-8', 'text/turtle']
+
 def from_jsonld(data, options=None):
     """Render JSON-LD data into Turtle.
 

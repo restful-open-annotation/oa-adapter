@@ -10,6 +10,12 @@ import json
 # Default values for rendering options
 PRETTYPRINT_DEFAULT = True
 
+# Short name for this format.
+format_name = 'jsonld'
+
+# The MIME types associated with this format.
+mimetypes = ['application/ld+json']
+
 def from_jsonld(data, options=None):
     """Render JSON-LD data into string.
 

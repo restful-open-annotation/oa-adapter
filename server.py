@@ -11,27 +11,20 @@ import json
 import flask
 
 import oajson
+import formatloader
 
-from parse import parse_data
-from render import render_resource
+from parse import make_parser
+from render import make_renderer
 
 DEBUG = True
 
 app = flask.Flask(__name__)
 
-def get_json(request, abort_on_failure=True):
-    """Return JSON from Flask request."""
-    try:
-        # force for JSON-LD: application/ld+json is not recognized by
-        # older Flask versions.
-        return flask.request.get_json(force=True)
-    except Exception, e:
-        if abort_on_failure:
-            # TODO: attach a JSON structure describing the error.
-            flask.abort(400, 'failed to load JSON (Content-Type: %s)' %
-                        flask.request.mimetype)
-        else:
-            raise
+# Create functions for parsing received data and rendering output data
+# dynamically based on the available format modules.
+formats = formatloader.load()
+parse_data = make_parser(formats)
+render_resource = make_renderer(formats)
 
 def get_request_data(request):
     """Return (data, mimetype, charset) triple for Flask request."""

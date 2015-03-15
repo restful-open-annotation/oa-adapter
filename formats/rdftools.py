@@ -9,27 +9,6 @@ import rdflib
 
 from pyld import jsonld
 
-# Mapping from short identifiers for RDF formats to their content types.
-# Note: the format strings should match those used by rdflib.
-format_to_content_types = {
-    'jsonld': ('application/ld+json', ),
-    'nt':     ('application/n-triples', ),
-    'nquads': ('application/n-quads', ),
-    # Note: "charset" for n3 and turtle is not an error: "This MIME
-    # type is used with a charset parameter: the encoding is always
-    # utf-8. [...] This is because the default encoding for types in
-    # the text/* tree is ASCII (http://www.w3.org/TeamSubmission/n3/).
-    'n3':     ('text/n3; charset=utf-8', 'text/n3'),
-    'trig':   ('application/trig', ),
-    'trix':   ('application/trix', ),
-    'turtle': ('text/turtle; charset=utf-8', 'text/turtle'),
-}
-
-# Mapping from content types to short identifiers for RDF formats.
-content_type_to_format = dict((ct, name)
-                              for name, cts in format_to_content_types.items()
-                              for ct in cts)
-
 def from_jsonld(data, format):
     """Return string in given RDF format from JSON-LD data.
 
@@ -60,9 +39,6 @@ def from_string(data, format):
     Returns:
         instance of rdflib.Graph.
     """
-    # Map to rdflib short format name if content type format.
-    format = content_type_to_format.get(format, format)
-
     # Using ConjunctiveGraph instead of Graph for nquads support.
     graph = rdflib.ConjunctiveGraph()
     graph.parse(data=data, format=format)
@@ -107,7 +83,7 @@ def to_jsonld(data, format):
     """
     # pyld only supports parsing of nquads. Other formats are first
     # converted into nquads via rdflib.Graph.
-    if content_type_to_format.get(format, format) != 'nquads':
+    if format != 'nquads':
         graph = from_string(data, format)
         data = graph.serialize(format='nquads')
         # The above conversion introduces blank node identifiers for

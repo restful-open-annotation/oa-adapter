@@ -7,6 +7,16 @@ __license__ = 'MIT'
 
 import rdftools
 
+# Short name for this format.
+format_name = 'n3'
+
+# The MIME types associated with this format.
+# Note: "charset" is not an error: "This MIME type is used with a
+# charset parameter: the encoding is always utf-8. [...] This is
+# because the default encoding for types in the text/* tree is ASCII
+# (http://www.w3.org/TeamSubmission/n3/).
+mimetypes = ['text/n3; charset=utf-8', 'text/n3']
+
 def from_jsonld(data, options=None):
     """Render JSON-LD data into N3 string.
 
