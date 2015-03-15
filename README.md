@@ -32,3 +32,23 @@ define the following:
   format.
 * `to_jsonld`: function taking a string in the format and returning a JSON-LD
   dict.
+
+For example, try creating the following `formats/tsv_format.py`:
+
+    format_name = 'tsv'
+
+    mimetypes = ['text/tab-separated-values']
+
+    def from_jsonld(data, options=None):
+        return '\t'.join(('%s=%s') % (k, v) for k, v in data[0].items())
+
+    def to_jsonld(data, options=None):
+        return [dict(d.rsplit('=', 1) for d in data.split('\t'))]
+
+This gives you a primitive, incomplete and incorrect implementation of TSV:
+
+     curl -H 'Content-Type: application/ld+json' \
+         -d '{ "@id": "foo", "target": "http://ex.com/1" }' \
+         127.0.0.1:5000/echo/ -H 'Accept: text/tab-separated-values'
+         
+    @id=http://127.0.0.1:5000/echo/foo	http://www.w3.org/ns/oa#hasTarget=[{'@id': u'http://ex.com/1'}]
