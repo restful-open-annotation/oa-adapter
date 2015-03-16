@@ -16,13 +16,12 @@ See:
 __author__ = 'Sampo Pyysalo'
 __license__ = 'MIT'
 
+import contexts
+
 from pyld import jsonld
 
-from contexts import get_context
-from contexts import wa_context_20141211
-
 def default_context():
-    return wa_context_20141211
+    return contexts.wa_context_20141211
 
 def default_base():
     return None
@@ -38,19 +37,19 @@ def _make_options(context, base):
     return options
 
 def expand(document, context=None, base=None):
-    """Expand OA JSON-LD, removing context."""
-    # See http://www.w3.org/TR/json-ld-api/#expansion
-    if context is None:
-        # if the JSON-LD document has a @context value that is a URL
-        # that we know, fill it in from cache to save a GET.
-        if '@context' in document:
-            document['@context'] = get_context(document['@context'])
+    """Expand OA JSON-LD, removing context.
+
+    See http://www.w3.org/TR/json-ld-api/#expansion.
+    """
+    # Try to avoid GETting URL contexts
+    document = contexts.context_urls_to_objects(document)
     return jsonld.expand(document, _make_options(context, base))
 
 def compact(document, context=None, base=None, remove_context=False):
-    """Compact OA JSON-LD, shortening forms according to context."""
+    """Compact OA JSON-LD, shortening forms according to context.
 
-    # See http://www.w3.org/TR/json-ld-api/#compaction
+    See http://www.w3.org/TR/json-ld-api/#compaction.
+    """
 
     if context is None:
         context = default_context()
@@ -62,6 +61,8 @@ def compact(document, context=None, base=None, remove_context=False):
         options['base'] = base
 
     compacted = jsonld.compact(document, context, options)
+    # Replace known context objects with URLs.
+    compacted = contexts.context_objects_to_urls(compacted)
 
     if remove_context:
         try:

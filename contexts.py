@@ -1,6 +1,37 @@
 #!/usr/bin/env python
 
-"""JSON-LD contexts related to Open Annotation."""
+"""Support for working with JSON-LD contexts."""
+
+from pyld import jsonld
+
+def context_urls_to_objects(document):
+    """Replace context URLs with their corresponding objects.
+
+    This function is intended to be called with a JSON-LD document
+    prior to expansion to avoid unnecessary HTTP GETs.
+    """
+    # TODO: process recursively.
+    try:
+        if '@context' in document:
+            document['@context'] = _get_context_for_url(document['@context'])
+    except TypeError:
+        # Assume document is not dict (e.g. list). TODO: implementation.
+        pass
+    return document
+
+def context_objects_to_urls(document):
+    """Replace context objects with their corresponding URLs.
+
+    This function is intended to be called with a JSON-LD document
+    after compaction for more concise presentation.
+    """
+    try:
+        if '@context' in document:
+            document['@context'] = _get_url_for_context(document['@context'])
+    except TypeError:
+        # Assume document is not dict (e.g. list). TODO: implementation.
+        pass
+    return document
 
 # Context description from the final Open Annotation collaboration
 # working draft (08 February 2013).
@@ -116,8 +147,24 @@ url_to_context = {
     'http://www.w3.org/ns/oa.jsonld': oa_context_20130208,
 }
 
-def get_context(url):
-    # Return context for the given URL if known.
+def _get_context_for_url(url):
+    """Return context object for given URL.
+
+    Returns:
+        context dict, or given URL if not found.
+    """
     if not isinstance(url, basestring):
         return url  # can only map strings
     return url_to_context.get(url, url)
+
+def _get_url_for_context(document):
+    """Return URL for given context object.
+
+    Returns:
+        context URL, or given dict if not found.
+    """
+    for url, context in url_to_context.iteritems():
+        # TODO: avoid unnecessarily repeated normalization of known contexts
+        if jsonld.normalize(context['@context']) == jsonld.normalize(document):
+            return url
+    return document
