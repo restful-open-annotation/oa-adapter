@@ -138,6 +138,61 @@ wa_context_20141211 = {
   }
 }
 
+# Context description for the RESTful Open Annotation API
+# (17 March 2015).
+roaa_context_20150317 = {
+ "@context": {
+    "oa" :     "http://www.w3.org/ns/oa#",
+    "dc" :     "http://purl.org/dc/elements/1.1/",
+    "dcterms": "http://purl.org/dc/terms/",
+    "dctypes": "http://purl.org/dc/dcmitype/",
+    "foaf" :   "http://xmlns.com/foaf/0.1/",
+    "rdf" :    "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "rdfs" :   "http://www.w3.org/2000/01/rdf-schema#",
+    "skos" :   "http://www.w3.org/2004/02/skos/core#",
+    "lrel" :   "http://www.iana.org/assignments/link-relations/#",
+
+    "body" :         {"@id" : "oa:hasBody"},
+    "target" :       {"@type":"@id", "@id" : "oa:hasTarget"},
+    "source" :       {"@type":"@id", "@id" : "oa:hasSource"},
+    "selector" :     {"@type":"@id", "@id" : "oa:hasSelector"},
+    "state" :        {"@type":"@id", "@id" : "oa:hasState"},
+    "scope" :        {"@type":"@id", "@id" : "oa:hasScope"},
+    "annotatedBy" :  {"@type":"@id", "@id" : "oa:annotatedBy"},
+    "serializedBy" : {"@type":"@id", "@id" : "oa:serializedBy"},
+    "motivation" :   {"@type":"@id", "@id" : "oa:motivatedBy"},
+    "stylesheet" :   {"@type":"@id", "@id" : "oa:styledBy"},
+    "cached" :       {"@type":"@id", "@id" : "oa:cachedSource"},
+    "conformsTo" :   {"@type":"@id", "@id" : "dcterms:conformsTo"},
+    "members" :      {"@type":"@id", "@id" : "oa:membershipList", "@container": "@list"},
+    "item" :         {"@type":"@id", "@id" : "oa:item"},
+    "related" :      {"@type":"@id", "@id" : "skos:related"},
+    "start":         {"@type":"@id", "@id" : "lrel:start"},
+    "prev":          {"@type":"@id", "@id" : "lrel:prev"},
+    "next":          {"@type":"@id", "@id" : "lrel:next"},
+    "last":          {"@type":"@id", "@id" : "lrel:last"},
+    "item":          {"@type":"@id", "@id" : "lrel:item"},
+    "collection":    {"@type":"@id", "@id" : "lrel:collection"},
+
+    "format" :       "dc:format",
+    "language":      "dc:language",
+    "annotatedAt" :  "oa:annotatedAt",
+    "serializedAt" : "oa:serializedAt",
+    "when" :         "oa:when",
+    "value" :        "rdf:value",
+    "start" :        "oa:start",
+    "end" :          "oa:end",
+    "exact" :        "oa:exact",
+    "prefix" :       "oa:prefix",
+    "suffix" :       "oa:suffix",
+    "label" :        "rdfs:label",
+    "name" :         "foaf:name",
+    "mbox" :         "foaf:mbox",
+    "nick" :         "foaf:nick",
+    "styleClass" :   "oa:styleClass"
+  }
+}
+
 # mapping from URLs to context descriptions.
 url_to_context = {
     # from http://www.openannotation.org/spec/core/publishing.html
@@ -145,6 +200,7 @@ url_to_context = {
     # curl http://www.w3.org/ns/oa-context-20130208.json (12.03.2015)
     # status 307 Temporary Redirect
     'http://www.w3.org/ns/oa.jsonld': oa_context_20130208,
+    'http://nlplab.org/ns/restoa-context-20150307.json': roaa_context_20150317,
 }
 
 def _get_context_for_url(url):

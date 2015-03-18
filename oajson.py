@@ -21,7 +21,7 @@ import contexts
 from pyld import jsonld
 
 def default_context():
-    return contexts.wa_context_20141211
+    return contexts.roaa_context_20150317
 
 def default_base():
     return None
