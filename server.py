@@ -12,6 +12,9 @@ import flask
 
 import oajson
 import formatloader
+import restoaclient
+import jsonldproxy
+import tools
 
 from parse import make_parser
 from render import make_renderer
@@ -26,22 +29,31 @@ formats = formatloader.load()
 parse_data = make_parser(formats)
 render_resource = make_renderer(formats)
 
-def get_request_data(request):
-    """Return (data, mimetype, charset) triple for Flask request."""
-    mimetype = request.mimetype
-    charset = request.mimetype_params.get('charset')
-    data = request.get_data()
-    return (data, mimetype, charset)
-
 @app.route('/echo/', methods=['PUT', 'POST'])
 @render_resource
 def echo():
     """Echo back received data, possibly in a different representation."""
-    data, mimetype, charset = get_request_data(flask.request)
+    data, mimetype, charset = tools.get_request_data(flask.request)
     data = parse_data(data, mimetype, charset)
     # TODO: check in which cases expansion is required.
     data = oajson.expand(data, base=flask.request.base_url)
     return { 'data': data }
+
+@app.route('/proxy/<path:url>')
+@render_resource
+def proxy(url):
+    """Mediate communication with other server."""
+    data, mimetype = restoaclient.get(url)
+    # TODO: parse mimetype properly
+    if 'text/html' in mimetype:
+        # Don't try to parse HTLM, but just pass it through.
+        return { 'data': data, 'options': { 'passthrough': True } }
+    else:
+        data = oajson.expand(data, base=tools.base_url(url))
+        # rewrite URLs in data so that they pass through this proxy.
+        proxyurl = flask.url_for('proxy', url='')
+        data = jsonldproxy.rewrite_urls(data, proxyurl)
+        return { 'data': data }
 
 def main(argv):
     app.run(debug=DEBUG)
